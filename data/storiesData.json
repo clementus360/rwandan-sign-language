@@ -1,0 +1,38 @@
+[
+    {
+        "id": "1",
+        "userName": "Murenzi",
+        "text": "Uyu munsi nize uko uvuga 'ndagukunda' mu rurimi rw'amarenga.",
+        "image": "https://example.com/images/story1.jpg",
+        "likes": 200,
+        "liked": false,
+        "timestamp": "2025-05-27T21:30:00Z"
+    },
+    {
+        "id": "2",
+        "userName": "Hamida",
+        "text": "Nta munezero nigeze numva mu buzima nk'uyu munsi nigiye nabashaga kuvugana n'umwana wange, nahonye agize ibyishimo byinshi nange numva biranshimishije pe.",
+        "image": null,
+        "likes": 50,
+        "liked": false,
+        "timestamp": "2025-05-27T20:45:00Z"
+    },
+    {
+        "id": "3",
+        "userName": "Immaculee",
+        "text": "Kwiga ururimi rw' amarenga byamfashije kwegerana n' umuryango wange",
+        "image": "https://example.com/images/story2.jpg",
+        "likes": 0,
+        "liked": false,
+        "timestamp": "2025-05-27T19:00:00Z"
+    },
+    {
+        "id": "4",
+        "userName": "Immaculee",
+        "text": "Kwiga ururimi rw' amarenga byamfashije kwegerana n' umuryango wange",
+        "image": "https://example.com/images/story2.jpg",
+        "likes": 0,
+        "liked": false,
+        "timestamp": "2025-02-27T19:00:00Z"
+    }
+]
