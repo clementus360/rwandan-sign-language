@@ -42,7 +42,7 @@ export default function CustomButton({
 
     const buttonStyles = `
     rounded-full gap-2 flex flex-row items-center justify-center
-    ${disabled ? 'bg-muted' : `bg-${color}`}
+    ${disabled ? 'bg-muted' : `bg-${color} hover:bg-${color}-dark`}
     ${size === 'sm' ? 'px-3 py-1' : size === 'lg' ? 'px-6 py-3' : size === 'round' ? 'px-3 py-3':'px-4 py-3'}
   `;
 

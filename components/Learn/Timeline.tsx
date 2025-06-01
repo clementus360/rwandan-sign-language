@@ -1,28 +1,32 @@
 import { useCourseStore } from '@/stores/useCourseStore';
 import { useSearchStore } from '@/stores/useSearchStore';
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import LessonComponent from '../Cards/LessonCard';
 import UnitHeader from '../Cards/UnitHeader';
 
-export default function TimelineComponent() {
-  const search = useSearchStore(state => state.value.toLowerCase().trim());
-  const units = useCourseStore(state => state.units);
-  const loading = useCourseStore(state => state.loading);
+export default function TimelinePage() {
+  const search = useSearchStore((state) => state.value.toLowerCase().trim());
+  const units = useCourseStore((state) => state.units);
+  const loading = useCourseStore((state) => state.loading);
+  const filterLikedLessons = useCourseStore((state) => state.filterLikedLessons);
+  const [showLikedOnly, setShowLikedOnly] = useState(false);
 
-  // Track if any lesson matched
   let anyLessonFound = false;
 
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center py-16">
-        <Text className="text-lg text-muted">Tegereza gato...</Text>
+        <Text className="text-lg text-muted">Loading...</Text>
       </View>
     );
   }
 
+  const lessonsToDisplay = showLikedOnly ? filterLikedLessons() : null;
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#f0f2f5', position: 'relative' }}>
+
       {/* Timeline Line */}
       <View
         style={{
@@ -36,59 +40,82 @@ export default function TimelineComponent() {
         }}
       />
 
-      {/* Units and Lessons */}
-      {units.map((unit) => {
-        const filteredLessons = unit.lessons.filter(lesson =>
-          lesson.title.toLowerCase().includes(search)
-        );
-
-        if (filteredLessons.length === 0) return null;
-
-        anyLessonFound = true;
-
-        return (
-          <View key={unit.id} style={{ marginHorizontal: 8, marginBottom: 40, position: 'relative' }}>
-            {/* Unit Header with Dot */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 24 }}>
-              <View
-                style={{
-                  position: 'absolute',
-                  left: -23,
-                  top: 26,
-                  width: 16,
-                  height: 16,
-                  borderRadius: 8,
-                  backgroundColor: '#3B82F6',
-                }}
-              />
-              <UnitHeader
-                title={unit.title}
-                description={unit.description}
-                progress={unit.progress ?? ''}
-                imageUrl={unit.imageUrl ?? ''}
-              />
-            </View>
-
-            {/* Filtered Lessons */}
-            {filteredLessons.map((lesson) => (
-              <View key={lesson.id} style={{ marginLeft: 24, marginTop: 16 }}>
+      {/* Liked Lessons or Units and Lessons */}
+      {showLikedOnly ? (
+        lessonsToDisplay && lessonsToDisplay.length > 0 ? (
+          lessonsToDisplay.map((lesson) => (
+            <View key={lesson.id} style={{ marginHorizontal: 8, marginBottom: 16, position: 'relative' }}>
+              <View style={{ marginLeft: 24 }}>
                 <LessonComponent
                   id={lesson.id}
                   title={lesson.title}
-                  description={lesson.description}
-                  icon={lesson.icon ?? ''}
+                  description={lesson.description || ''}
+                  icon={lesson.icon || ''}
                   status={lesson.status}
+                  isLiked={lesson.isLiked}
                 />
               </View>
-            ))}
+            </View>
+          ))
+        ) : (
+          <View className="items-center justify-center py-16">
+            <Text className="text-muted text-lg">No liked lessons found.</Text>
           </View>
-        );
-      })}
+        )
+      ) : (
+        units.map((unit) => {
+          const filteredLessons = unit.lessons.filter((lesson) =>
+            lesson.title.toLowerCase().includes(search)
+          );
 
-      {/* Empty state message */}
-      {!anyLessonFound && (
+          if (filteredLessons.length === 0) return null;
+
+          anyLessonFound = true;
+
+          return (
+            <View key={unit.id} style={{ marginHorizontal: 8, marginBottom: 40, position: 'relative' }}>
+              {/* Unit Header with Dot */}
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 24 }}>
+                <View
+                  style={{
+                    position: 'absolute',
+                    left: -23,
+                    top: 26,
+                    width: 16,
+                    height: 16,
+                    borderRadius: 8,
+                    backgroundColor: '#3B82F6',
+                  }}
+                />
+                <UnitHeader
+                  title={unit.title}
+                  description={unit.description || ''}
+                  progress={`${unit.progress}/${unit.lessons.length}`}
+                  imageUrl={unit.imageUrl || ''}
+                />
+              </View>
+
+              {/* Filtered Lessons */}
+              {filteredLessons.map((lesson) => (
+                <View key={lesson.id} style={{ marginLeft: 24, marginTop: 16 }}>
+                  <LessonComponent
+                    id={lesson.id}
+                    title={lesson.title}
+                    description={lesson.description || ''}
+                    icon={lesson.icon || ''}
+                    status={lesson.status}
+                    isLiked={lesson.isLiked}
+                  />
+                </View>
+              ))}
+            </View>
+          );
+        })
+      )}
+
+      {!showLikedOnly && !anyLessonFound && (
         <View className="items-center justify-center py-16">
-          <Text className="text-muted text-lg">Nta somo wabonye ku byo washyizemo.</Text>
+          <Text className="text-muted text-lg">No lessons found for your search.</Text>
         </View>
       )}
     </ScrollView>

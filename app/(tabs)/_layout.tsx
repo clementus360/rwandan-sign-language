@@ -9,7 +9,8 @@ import CustomHeader from '@/components/UI/CustomHeader';
 import { useUserStore } from "@/stores/useUserStore";
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Animated } from 'react-native';
+import { Animated, TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Custom animated tab icon component
 type AnimatedTabIconProps = {
@@ -20,7 +21,7 @@ type AnimatedTabIconProps = {
 };
 
 const AnimatedTabIcon: React.FC<AnimatedTabIconProps> = ({ Icon, isFocused, activeColor, inactiveColor }) => {
-    
+
     // Animation value for icon scaling
     const animatedValue = React.useRef(new Animated.Value(isFocused ? 1.2 : 1)).current;
 
@@ -56,6 +57,9 @@ export default function TabLayout() {
     const activeColor = '#10B981'; // Green color for active tab
     const inactiveColor = '#374151'; // Dark gray for inactive tabs
 
+    const insets = useSafeAreaInsets();
+    const paddingBottom = insets.bottom > 0 ? insets.bottom : 4; // fallback
+
     return (
         <Tabs
             screenOptions={{
@@ -67,12 +71,12 @@ export default function TabLayout() {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    height: 100, // more than default
                     backgroundColor: '#FFFFFF',
                     borderTopWidth: 0.2,
                     borderTopColor: '#E5E7EB',
-                    paddingBottom: 16, // keeps icons within safe area
+                    paddingBottom: paddingBottom,
                     paddingTop: 8,
+                    height: 60 + paddingBottom, // dynamically add space for safe area
                 },
                 tabBarLabelStyle: {
                     fontSize: 12,
@@ -101,7 +105,20 @@ export default function TabLayout() {
                             userName={userName || ''}
                             profileImage={require('@/assets/images/profile.jpg')}
                         />
-                    )
+                    ),
+                    tabBarButton: (props) => {
+                        // Remove any props with value null to avoid type errors
+                        const filteredProps = Object.fromEntries(
+                            Object.entries(props).filter(([_, v]) => v !== null)
+                        );
+                        return (
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                style={{ flex: 1 }}
+                                {...filteredProps}
+                            />
+                        );
+                    },
                 }}
             />
             <Tabs.Screen
@@ -123,7 +140,20 @@ export default function TabLayout() {
                             showNotification={true}
                             showSearch={true}
                         />
-                    )
+                    ),
+                    tabBarButton: (props) => {
+                        // Remove any props with value null to avoid type errors
+                        const filteredProps = Object.fromEntries(
+                            Object.entries(props).filter(([_, v]) => v !== null)
+                        );
+                        return (
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                style={{ flex: 1 }}
+                                {...filteredProps}
+                            />
+                        );
+                    },
                 }}
             />
 
@@ -145,7 +175,20 @@ export default function TabLayout() {
                             showBack={true}
                             showNotification={true}
                         />
-                    )
+                    ),
+                    tabBarButton: (props) => {
+                        // Remove any props with value null to avoid type errors
+                        const filteredProps = Object.fromEntries(
+                            Object.entries(props).filter(([_, v]) => v !== null)
+                        );
+                        return (
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                style={{ flex: 1 }}
+                                {...filteredProps}
+                            />
+                        );
+                    },
                 }}
             />
 
@@ -167,7 +210,20 @@ export default function TabLayout() {
                             showBack={true}
                             showNotification={true}
                         />
-                    )
+                    ),
+                    tabBarButton: (props) => {
+                        // Remove any props with value null to avoid type errors
+                        const filteredProps = Object.fromEntries(
+                            Object.entries(props).filter(([_, v]) => v !== null)
+                        );
+                        return (
+                            <TouchableOpacity
+                                activeOpacity={0.6}
+                                style={{ flex: 1 }}
+                                {...filteredProps}
+                            />
+                        );
+                    },
                 }}
             />
 
@@ -178,6 +234,37 @@ export default function TabLayout() {
                     title: 'Learn',
                     href: null, // This prevents direct navigation from tab bar
                     headerShown: false,
+                }}
+            />
+
+            {/* Keep the route but hide it from the tab bar */}
+            <Tabs.Screen
+                name="progress"
+                options={{
+                    title: 'Progress',
+                    href: null, // This prevents direct navigation from tab bar
+                    header: () => (
+                        <CustomHeader
+                            userName={userName || ''}
+                            profileImage={require('@/assets/images/profile.jpg')}
+                        />
+                    )
+                }}
+            />
+
+            {/* Keep the route but hide it from the tab bar */}
+            <Tabs.Screen
+                name="settings"
+                options={{
+                    title: 'Settings',
+                    href: null, // This prevents direct navigation from tab bar
+                    header: () => (
+                        <CustomHeader
+                            title="Hindura"
+                            showBack={true}
+                            showNotification={true}
+                        />
+                    )
                 }}
             />
         </Tabs>

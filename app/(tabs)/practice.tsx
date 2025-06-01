@@ -4,18 +4,18 @@ import { Feather } from '@expo/vector-icons';
 import { useEvent } from 'expo';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Modal, Pressable, ScrollView, Text, View } from 'react-native';
+import { Animated, Modal, Pressable, ScrollView, StatusBar, Text, View } from 'react-native';
 
 export default function PracticePage() {
   const {
-  loading,
-  selectedAnswer,
-  feedback,
-  selectAnswer,
-  goToNextQuestion,
-} = usePracticeStore();
+    loading,
+    selectedAnswer,
+    feedback,
+    selectAnswer,
+    goToNextQuestion,
+  } = usePracticeStore();
 
-const currentQuestion = usePracticeStore(state => state.currentQuestion()); 
+  const currentQuestion = usePracticeStore(state => state.currentQuestion());
 
   const player = useVideoPlayer(currentQuestion?.video ?? '', player => {
     player.loop = true;
@@ -150,6 +150,7 @@ const currentQuestion = usePracticeStore(state => state.currentQuestion());
 
   return (
     <>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <ScrollView className="flex-1 bg-gray-100">
         <View className="relative">
           <VideoView

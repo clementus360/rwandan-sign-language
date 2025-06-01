@@ -1,7 +1,8 @@
+import { useCourseStore } from '@/stores/useCourseStore';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import CustomButton from '../UI/CustomButton';
 
 interface LessonProps {
@@ -10,19 +11,21 @@ interface LessonProps {
     description: string;
     icon: string;
     status: 'completed' | 'pending';
+    isLiked: boolean;
 }
 
-const LessonComponent: React.FC<LessonProps> = ({ id, title, description, icon, status }) => {
-
+const LessonComponent: React.FC<LessonProps> = ({ id, title, description, icon, status, isLiked }) => {
     const router = useRouter();
+    const toggleLessonLike = useCourseStore((state) => state.toggleLessonLike);
+    const toggleLessonStatus = useCourseStore((state) => state.toggleLessonStatus);
 
-  const handlePress = () => {
-    router.push(`/learn/${id}`);
-  };
-  
+    const handlePress = () => {
+        router.push(`/learn/${id}`);
+    };
+
     return (
         <View
-            className='flex flex-col gap-2 '
+            className="flex flex-col gap-2"
             style={{
                 backgroundColor: '#fff',
                 borderRadius: 10,
@@ -46,16 +49,24 @@ const LessonComponent: React.FC<LessonProps> = ({ id, title, description, icon, 
                     <Text style={{ fontSize: 18, fontWeight: '600' }}>{title}</Text>
                     <Text style={{ fontSize: 14, color: '#666', marginTop: 5 }}>{description}</Text>
                 </View>
-                {status === 'completed' && (
-                    <View className='bg-accent rounded-full p-1'>
-                        <Feather name="check" size={10} color="#ffffff" />
-                    </View>
-                )}
-                {status != 'completed' && (
-                    <View className='bg-primary rounded-full p-1'>
-                        <Feather name="clock" size={10} color="#ffffff" />
-                    </View>
-                )}
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    {/* <Pressable
+                        className={`p-1 rounded-full ${isLiked ? 'border-2 border-primary' : 'bg-primary'}`}
+                        onPress={() => toggleLessonLike(id)}
+                    >
+                        <Feather name="heart" size={16} color={isLiked ? '#F59E0B' : '#ffffff'} />
+                    </Pressable> */}
+                    <Pressable
+                        className={`p-1 rounded-full ${status === 'completed' ? 'bg-accent' : 'bg-primary'}`}
+                        onPress={() => toggleLessonStatus(id)}
+                    >
+                        <Feather
+                            name={status === 'completed' ? 'check' : 'clock'}
+                            size={10}
+                            color="#ffffff"
+                        />
+                    </Pressable>
+                </View>
             </View>
             <CustomButton
                 title={status === 'completed' ? 'Subiramo' : 'Tangira'}
@@ -63,7 +74,11 @@ const LessonComponent: React.FC<LessonProps> = ({ id, title, description, icon, 
                 color={status === 'completed' ? 'accent' : 'primary'}
                 size="md"
                 icon={
-                    status === 'completed' ? <Feather name="repeat" size={16} color="white" /> : <Feather name="play" size={16} color="white" />
+                    status === 'completed' ? (
+                        <Feather name="repeat" size={16} color="white" />
+                    ) : (
+                        <Feather name="play" size={16} color="white" />
+                    )
                 }
             />
         </View>

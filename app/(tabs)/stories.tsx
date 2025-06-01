@@ -4,7 +4,7 @@ import { formatTimestamp } from '@/utils/timestamp';
 import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
-import { Alert, Image, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, Image, Modal, Pressable, ScrollView, StatusBar, Text, TextInput, View } from 'react-native';
 
 export default function StoriesPage() {
   const { stories, loading, init, addStory, toggleLike } = useStoriesStore();
@@ -54,12 +54,18 @@ export default function StoriesPage() {
 
   return (
     <>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <ScrollView className="flex-1 bg-gray-100">
         <View className="p-4 flex flex-col gap-4">
           {stories.map(story => (
             <View key={story.id} className="bg-white rounded-xl p-4 shadow-sm">
               <View className="flex-row items-center mb-2">
-                <View className="w-10 h-10 rounded-full bg-gray-300 mr-3" />
+                <Image
+                  source={{
+                    uri: `https://api.dicebear.com/7.x/initials/png?seed=${story.userName}`,
+                  }}
+                  className="w-10 h-10 rounded-full mr-3"
+                />
                 <View>
                   <Text className="font-bold text-gray-800">{story.userName}</Text>
                   <Text className="text-gray-500 text-sm">

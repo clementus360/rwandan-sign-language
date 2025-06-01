@@ -7,17 +7,18 @@ export interface Lesson {
     title: string;
     description: string;
     video: string;
-    image?: string;
-    icon?: string;
-    status: LessonStatus;
+    image: string;
+    icon: string;
+    status: 'completed' | 'pending';
+    isLiked: boolean;
 }
 
 export interface Unit {
     id: string;
     title: string;
-    description: string;
+    description?: string;
     imageUrl?: string;
-    progress?: string;
+    progress: number;
     lessons: Lesson[];
 }
 

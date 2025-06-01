@@ -12,10 +12,10 @@ export default function LessonDetailPage() {
     const { lessonId } = useLocalSearchParams<{ lessonId: string }>();
     const router = useRouter();
 
-    const lesson = useCourseStore(state => state.getLessonById(lessonId));
-
-    const toggleLessonStatus = useCourseStore(state => state.toggleLessonStatus);
-    const getNextLessonId = useCourseStore(state => state.getNextLessonId);
+    const lesson = useCourseStore((state) => state.getLessonById(lessonId));
+    const toggleLessonStatus = useCourseStore((state) => state.toggleLessonStatus);
+    const toggleLessonLike = useCourseStore((state) => state.toggleLessonLike);
+    const getNextLessonId = useCourseStore((state) => state.getNextLessonId);
 
     const fadeAnim = useRef(new Animated.Value(1)).current;
     const [controlsVisible, setControlsVisible] = useState(true);
@@ -118,6 +118,9 @@ export default function LessonDetailPage() {
     };
 
     const handleNext = () => {
+        if (lesson.status === 'pending') {
+            toggleLessonStatus(lesson.id);
+        }
         const nextLessonId = getNextLessonId(lesson.id);
         if (nextLessonId) {
             router.push(`/learn/${nextLessonId}`);
@@ -142,9 +145,7 @@ export default function LessonDetailPage() {
                         nativeControls={false}
                         allowsFullscreen
                         allowsPictureInPicture
-                    // Removed onTouchStart from VideoView
                     />
-
                     <Animated.View
                         style={{
                             position: 'absolute',
@@ -161,10 +162,8 @@ export default function LessonDetailPage() {
                                 backgroundColor: 'rgba(0, 0, 0, 0.6)',
                             }}
                             onPress={handleVideoTap}
-                            // Ensure the overlay is interactive even when controls are hidden
                             pointerEvents="auto"
                         />
-
                         <Pressable
                             onPress={() => {
                                 handlePlay();
@@ -198,7 +197,6 @@ export default function LessonDetailPage() {
                                 {isPlaying ? 'Hagarara' : 'Tangira'}
                             </Text>
                         </Pressable>
-
                         <Pressable
                             className="absolute bottom-3 right-4 bg-neutral px-3 py-1 rounded-full"
                             onPressIn={() => {
@@ -219,16 +217,15 @@ export default function LessonDetailPage() {
                             <Text className="text-4xl font-bold text-dark">{lesson.title}</Text>
                             <Text className="text-muted w-72 text-base text-wrap">{lesson.description}</Text>
                         </View>
-                        <View className="flex flex-row items-center justify-center gap-2">
+                        <View className="flex flex-row items-center justify-center gap-2 rounded-full">
                             <Pressable
-                                className={`flex flex-row items-center justify-center ${lesson.status === 'completed' ? 'border-2 border-primary' : 'bg-primary'
-                                    } p-2 rounded-full`}
-                                onPress={() => toggleLessonStatus(lesson.id)}
+                                className={`flex flex-row items-center justify-center ${lesson.isLiked ? 'bg-primary' : 'border-2 border-primary'} p-2 rounded-full`}
+                                onPress={() => toggleLessonLike(lesson.id)}
                             >
                                 <Feather
                                     name="heart"
                                     size={12}
-                                    color={lesson.status === 'completed' ? '#F59E0B' : '#ffffff'}
+                                    color={lesson.isLiked ? '#ffffff' : '#F59E0B'}
                                 />
                             </Pressable>
                             <Text>Kunda</Text>

@@ -6,6 +6,7 @@ import { NunitoSans_400Regular, NunitoSans_700Bold, NunitoSans_800ExtraBold, use
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
+import { StatusBar } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -40,7 +41,12 @@ export default function RootLayout() {
 
   // Show onboarding if userName is not set
   if (!userName) {
-    return <Onboarding />;
+    return (
+      <>
+        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        <Onboarding />
+      </>
+    );
   }
 
   return <Slot />;

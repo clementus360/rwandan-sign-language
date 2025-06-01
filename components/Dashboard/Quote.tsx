@@ -1,8 +1,13 @@
 import TiltedArrowIcon from "@/assets/icons/TiltedArrow";
+import { router } from "expo-router";
 import { Image, Text, View } from 'react-native';
 import CustomButton from "../UI/CustomButton";
 
 export default function Quote() {
+    const handleStart = () => {
+        router.push(`/learn`);
+    };
+
     return (
         <View className="relative w-full flex flex-col items-center justify-center gap-6 bg-accent-dark rounded-2xl overflow-hidden">
             {/* Soft Overlay Motif */}
@@ -21,7 +26,7 @@ export default function Quote() {
 
             <CustomButton
                 title="Tangira kwiga!"
-                onPress={() => alert('Start pressed!')}
+                onPress={handleStart}
                 color="primary"
                 icon={<TiltedArrowIcon width={16} height={16} />}
             />
