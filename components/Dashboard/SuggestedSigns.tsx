@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { ScrollView, Text, View } from 'react-native';
 import CardSection from '../Cards/SuggestionCard';
 
@@ -6,17 +7,17 @@ export default function Suggested() {
     const suggestions = [
         {
             imageSource: require('@/assets/images/family-image.png'), // Replace with your image path
-            title: "Umuryango",
+            title: "Amarangamutima",
             description: "Menya uko wavugana n'abagize umuryango wawe — mama, papa, murumuna...",
             iconSource: '@/assets/icons/user-love', // Replace with your icon path
-            onCTAPress: () => alert('CTA pressed for Umuryango!'),
+            onCTAPress: () => router.push('/learn/9'), // Navigate to the specific lesson
         },
         {
             imageSource: require('@/assets/images/greetings-image.png'), // Replace with another image path
-            title: "Insuhuzanyo",
+            title: "Indamukanyo",
             description: "Uko wasuhuza, uvuga ‘bite’, ‘murakoze’, ‘naramutse’...",
             iconSource: '@/assets/icons/peace-hand.png', // Replace with your icon path
-            onCTAPress: () => alert('CTA pressed for Another Section!'),
+            onCTAPress: () => router.push('/learn/5'), // Navigate to the specific lesson
         },
         // Add more suggestions as needed
     ]

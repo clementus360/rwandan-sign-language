@@ -25,7 +25,7 @@ export default function CustomHeader({
 }: CustomHeaderProps) {
     const insets = useSafeAreaInsets();
     const [menuVisible, setMenuVisible] = useState(false); // Debug state
-    console.log('setMenuVisible type:', typeof setMenuVisible); // Debug log
+    // console.log('setMenuVisible type:', typeof setMenuVisible); // Debug log
 
     const { userName: storedUserName, userImage } = useUserStore(); // Moved inside to ensure it’s defined
 
@@ -34,7 +34,7 @@ export default function CustomHeader({
     const avatarSource = { uri: avatarUrl };
 
     const toggleMenu = () => {
-        console.log('Toggling menu, current state:', menuVisible, 'setter:', setMenuVisible);
+        // console.log('Toggling menu, current state:', menuVisible, 'setter:', setMenuVisible);
         setMenuVisible((prev) => !prev); // Use functional update to ensure correct state
     };
 
@@ -49,7 +49,7 @@ export default function CustomHeader({
     };
 
     return (
-        <View className={`pt-12 px-4 pb-4 bg-white`}>
+        <View className={`pt-6 px-4 pb-4 bg-white`}>
             {/* Status Bar Space */}
             <View style={{ height: insets.top }} />
 
@@ -91,11 +91,11 @@ export default function CustomHeader({
                             <View style={styles.menu}>
                                 <Pressable onPress={handleSettingsPress} style={styles.menuItem}>
                                     <Feather name="settings" size={20} color="#000000" style={styles.menuIcon} />
-                                    <Text style={styles.menuText}>Settings</Text>
+                                    <Text style={styles.menuText}>Hindura</Text>
                                 </Pressable>
                                 <Pressable onPress={handleProgressPress} style={styles.menuItem}>
                                     <Feather name="trending-up" size={20} color="#000000" style={styles.menuIcon} />
-                                    <Text style={styles.menuText}>Progress</Text>
+                                    <Text style={styles.menuText}>Ibyagezweho</Text>
                                 </Pressable>
                             </View>
                         )}

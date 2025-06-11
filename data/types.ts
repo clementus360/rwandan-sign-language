@@ -6,6 +6,7 @@ export interface Lesson {
     id: string;
     title: string;
     description: string;
+    type: 'story' | 'sign'
     video: string;
     image: string;
     icon: string;

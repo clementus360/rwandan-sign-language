@@ -111,8 +111,17 @@ export default function StoriesPage() {
         animationType="fade"
         onRequestClose={() => setShowPostModal(false)}
       >
-        <View className="flex-1 justify-center items-center bg-black/50">
+        <Pressable
+          className="flex-1 justify-center items-center bg-black/50"
+          onPress={() => setShowPostModal(false)}
+        >
           <View className="bg-white rounded-xl p-8 w-11/12 max-w-md flex-1 max-h-[80%]">
+            <Pressable
+              className="absolute top-4 right-4"
+              onPress={() => setShowPostModal(false)}
+            >
+              <Feather name="x" size={24} color="#374151" />
+            </Pressable>
             <Text className="text-xl font-bold text-gray-800 mb-4">
               Andika inkuru yawe hano
             </Text>
@@ -120,7 +129,7 @@ export default function StoriesPage() {
               className="border border-gray-300 rounded-lg p-4 flex-1 text-gray-800 mb-4"
               placeholder="Andika hano..."
               multiline
-              textAlignVertical="top" // Move placeholder to top
+              textAlignVertical="top"
               value={newStoryText}
               onChangeText={setNewStoryText}
             />
@@ -145,7 +154,7 @@ export default function StoriesPage() {
               icon={<Feather name="chevron-right" size={16} color="white" />}
             />
           </View>
-        </View>
+        </Pressable>
       </Modal>
     </>
   );

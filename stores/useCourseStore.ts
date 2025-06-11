@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 type CourseStore = {
+    showLikedOnly: boolean;
     units: Unit[];
     lessonHistory: string[];
     loading: boolean;
@@ -20,6 +21,7 @@ type CourseStore = {
     addUnit: (unit: Omit<Unit, 'id' | 'lessons'>) => void;
     updateUnit: (id: string, updates: Partial<Omit<Unit, 'id' | 'lessons'>>) => void;
     deleteUnit: (id: string) => void;
+    setShowLikedOnly: (value: boolean) => void;
 };
 
 export const useCourseStore = create<CourseStore>()(
@@ -28,6 +30,7 @@ export const useCourseStore = create<CourseStore>()(
             units: [],
             lessonHistory: [],
             loading: true,
+            showLikedOnly: false,
 
             init: async () => {
                 const json = await require('@/data/courseData.json');
@@ -169,6 +172,8 @@ export const useCourseStore = create<CourseStore>()(
                     units: state.units.filter((unit) => unit.id !== id),
                 }));
             },
+
+            setShowLikedOnly: (value) => set({ showLikedOnly: value }),
         }),
         {
             name: 'course-storage',

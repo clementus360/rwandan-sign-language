@@ -2,7 +2,7 @@ import { useCourseStore } from '@/stores/useCourseStore';
 import { useSearchStore } from '@/stores/useSearchStore';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
 import CustomButton from '../UI/CustomButton';
 
@@ -10,8 +10,9 @@ export default function ContinueCard() {
     const search = useSearchStore((state) => state.value.toLowerCase().trim());
     const units = useCourseStore((state) => state.units);
     const filterLikedLessons = useCourseStore((state) => state.filterLikedLessons);
+    const showLikedOnly = useCourseStore((state) => state.showLikedOnly);
+    const setShowLikedOnly = useCourseStore((state) => state.setShowLikedOnly);
     const router = useRouter();
-    const [showLikedOnly, setShowLikedOnly] = useState(false);
 
     // Calculate progress and find next pending lesson
     const lessons = showLikedOnly
@@ -57,7 +58,7 @@ export default function ContinueCard() {
 
     return (
         <View className='flex flex-col gap-4'>
-            {completedLessons > 0 &&
+            {completedLessons > 0 && (
                 <View className="relative w-full flex flex-col gap-4 bg-accent-dark rounded-2xl overflow-hidden py-8 px-6">
                     {/* Soft Overlay Motif */}
                     <Image
@@ -85,7 +86,8 @@ export default function ContinueCard() {
                             </Text>
                         </View>
                     </View>
-                </View>}
+                </View>
+            )}
 
             {/* Filter Segmented Control */}
             <View className="flex-row justify-center mb-2">
