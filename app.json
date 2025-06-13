@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rwandan-sign-language",
-    "slug": "rwandan-sign-language",
+    "name": "Sabana",
+    "slug": "sabana",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,14 +9,16 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.clementus360.sabana"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.clementus360.sabana"
     },
     "web": {
       "bundler": "metro",
@@ -44,6 +46,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b300621b-6820-41b9-9cd4-970914ce83aa"
+      }
     }
   }
 }
