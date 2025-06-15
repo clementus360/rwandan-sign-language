@@ -49,7 +49,7 @@ const CurvedMask = ({ width: maskWidth }: { width: number }) => (
     >
         <Path
             d={`M0,60 L0,20 Q${maskWidth / 4},0 ${maskWidth / 2},10 Q${maskWidth * 3 / 4},20 ${maskWidth},0 L${maskWidth},60 Z`}
-            fill="white"
+            fill="#FFFFFF" // Match the white background
         />
     </Svg>
 );
@@ -120,80 +120,82 @@ export default function Onboarding() {
     const isLastStep = currentStep === onboardingSteps.length;
 
     // Calculate image height based on screen size and keyboard
-    const imageHeight = keyboardHeight > 0 ? height * 0.45 : height * 0.65;
+    const imageHeight = keyboardHeight > 0 ? height * 0.4 : height * 0.6;
 
     return (
-        <GestureHandlerRootView className="flex-1 bg-white">
-            <SafeAreaView className="flex-1" edges={['top']}>
-                {/* Background shapes */}
-                {/* <BackgroundShapes step={currentStep} /> */}
-
+        <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }} edges={['top']}>
                 <KeyboardAvoidingView
-                    className="flex-1"
+                    style={{ flex: 1 }}
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    keyboardVerticalOffset={Platform.OS === 'ios' ? 50 : 0}
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 50 : 20}
                 >
-                    <View className="flex-1">
+                    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                         {/* Content Area */}
                         <GestureDetector gesture={swipeGesture}>
                             <Animated.View style={[{ flex: 1 }, animatedStyle]}>
                                 {isLastStep ? (
-                                    // Centered Name Input
-                                    <View className="flex-1 justify-center items-center px-6">
-                                        <View className="w-full max-w-md">
-                                            <Text className="text-2xl inter-bold text-dark mb-4 text-center">
+                                    // Centered Name Input for the last step
+                                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 24, backgroundColor: '#FFFFFF' }}>
+                                        <View style={{ width: '100%', maxWidth: 400 }}>
+                                            <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#1F2A44', marginBottom: 16, textAlign: 'center' }}>
                                                 Andika izina ryawe
                                             </Text>
                                             <TextInput
-                                                className="border border-primary rounded-lg p-4 text-dark mb-4 w-full text-lg"
+                                                style={{
+                                                    borderWidth: 1,
+                                                    borderColor: '#6B4EFF',
+                                                    borderRadius: 8,
+                                                    padding: 16,
+                                                    color: '#1F2A44',
+                                                    fontSize: 16,
+                                                    marginBottom: 24,
+                                                    width: '100%',
+                                                }}
                                                 placeholder="Izina ryawe..."
+                                                placeholderTextColor="#A0AEC0"
                                                 value={userName}
                                                 onChangeText={setUserName}
                                                 returnKeyType="done"
                                                 blurOnSubmit={true}
                                                 autoFocus={false}
-                                                style={{ fontSize: 16 }}
                                             />
                                         </View>
                                     </View>
                                 ) : (
-                                    // Onboarding Steps with enhanced layout
-                                    <View className="flex-1">
-                                        {/* Image Container with curved mask */}
-                                        <View style={{ height: imageHeight, position: 'relative', marginTop: 20 }}>
+                                    // Onboarding Steps
+                                    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                                        {/* Image Container */}
+                                        <View style={{ height: imageHeight, position: 'relative', marginTop: 16, width: '100%' }}>
                                             <ImageBackground
                                                 source={{ uri: onboardingSteps[currentStep].image }}
-                                                style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                }}
-                                                resizeMode="cover"
-                                                imageStyle={{
-                                                    resizeMode: 'cover',
-                                                    alignSelf: 'flex-start'
-                                                }}
-                                            >
-                                            </ImageBackground>
-                                            {/* Curved mask at bottom */}
+                                                style={{ width: '100%', height: '100%' }}
+                                                resizeMode="cover" // Use cover to fill width
+                                            />
                                             <CurvedMask width={width} />
                                         </View>
 
                                         {/* Content below image */}
-                                        <View className="flex-1 px-6">
-                                            <Text className="text-2xl inter-bold text-dark mb-4 text-center">
+                                        <View style={{ flex: 1, paddingHorizontal: 24, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#1F2A44', marginBottom: 16, textAlign: 'center' }}>
                                                 {onboardingSteps[currentStep].title}
                                             </Text>
-                                            <Text className="text-muted text-center mb-6 text-base leading-6">
+                                            <Text style={{ fontSize: 16, color: '#4A5568', textAlign: 'center', marginBottom: 24, lineHeight: 24 }}>
                                                 {onboardingSteps[currentStep].description}
                                             </Text>
 
                                             {/* Progress indicators */}
-                                            <View className="flex-row justify-center mb-8">
+                                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 32 }}>
                                                 {onboardingSteps.map((_, index) => (
                                                     <View
                                                         key={index}
-                                                        className={`w-3 h-3 rounded-full mx-1 ${index === currentStep ? 'bg-primary' : 'bg-gray-300'
-                                                            }`}
+                                                        style={{
+                                                            width: 8,
+                                                            height: 8,
+                                                            borderRadius: 6,
+                                                            marginHorizontal: 4,
+                                                            backgroundColor: index === currentStep ? '#6B4EFF' : '#D1D5DB',
+                                                        }}
                                                     />
                                                 ))}
                                             </View>
@@ -204,7 +206,7 @@ export default function Onboarding() {
                         </GestureDetector>
 
                         {/* Fixed Button */}
-                        <SafeAreaView edges={['bottom']} style={{ paddingHorizontal: 24, paddingBottom: 16 }}>
+                        <SafeAreaView edges={['bottom']} style={{ paddingHorizontal: 24, paddingBottom: 16, backgroundColor: '#FFFFFF' }}>
                             <CustomButton
                                 title="Komeza"
                                 onPress={handleNext}

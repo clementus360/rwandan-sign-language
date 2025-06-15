@@ -560,7 +560,7 @@ export default function PracticePage() {
 
               <View className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-200 mb-4">
                 <Text className="text-muted text-center text-base leading-6">
-                  Iyi myitozo izagufasha gusubiramo no gutsimbataza ubumenyi bwawe bw'Ururimi rw'Amarenga rwo mu Rwanda.
+                  Iyi myitozo izagufasha gusubiramo no gukomeza ubumenyi bwawe bw'Ururimi rw'Amarenga.
                 </Text>
               </View>
             </View>

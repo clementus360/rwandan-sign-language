@@ -53,25 +53,6 @@ export default function Settings() {
         router.back();
     };
 
-    // const handleLogout = () => {
-    //     Alert.alert(
-    //         'Logout',
-    //         'Are you sure you want to logout? This will clear your user data.',
-    //         [
-    //             { text: 'Cancel', style: 'cancel' },
-    //             {
-    //                 text: 'Logout',
-    //                 style: 'destructive',
-    //                 onPress: () => {
-    //                     clearUserName();
-    //                     clearUserImage();
-    //                     router.push('/onboarding');
-    //                 },
-    //             },
-    //         ]
-    //     );
-    // };
-
     const initials = (name || 'User')
         .split(' ')
         .map(word => word.charAt(0))
