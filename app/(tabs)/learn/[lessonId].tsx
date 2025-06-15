@@ -35,7 +35,7 @@ export default function LessonDetailPage() {
             player.pause();
             player.replace(null); // Reset the player source
         };
-    }, [lessonId, player]);
+    }, []);
 
     const { isPlaying } = useEvent(player, 'playingChange', {
         isPlaying: player.playing,
@@ -223,8 +223,8 @@ export default function LessonDetailPage() {
 
                 <View className="flex flex-col gap-4 px-4 py-4">
                     <View className="flex-1 flex-row justify-between gap-4">
-                        <View className="flex flex-col">
-                            <Text className="text-4xl font-bold text-dark">{lesson.title}</Text>
+                        <View className="flex flex-col w-9/12">
+                            <Text className="text-4xl font-bold text-dark w-10/12">{lesson.title}</Text>
                             <Text className="text-muted w-72 text-base text-wrap">{lesson.description}</Text>
                         </View>
                         <View className="flex flex-row items-center justify-center gap-2 rounded-full">

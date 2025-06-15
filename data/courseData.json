@@ -4,7 +4,7 @@
             "id": "1",
             "title": "IGICE CYA 1",
             "description": "Inyuguti",
-            "imageUrl": "unit-image.png",
+            "imageUrl": "https://res.cloudinary.com/dpfonnjv3/image/upload/v1750024526/illustration_of__ABC__cjyo4q.png",
             "progress": 0,
             "lessons": [
                 {
@@ -68,7 +68,7 @@
             "id": "2",
             "title": "IGICE CYA 2",
             "description": "Imibare",
-            "imageUrl": "unit-image.png",
+            "imageUrl": "https://res.cloudinary.com/dpfonnjv3/image/upload/v1750024518/Illustration_of__123__og7b38.png",
             "progress": 0,
             "lessons": [
                 {
@@ -143,7 +143,7 @@
             "id": "3",
             "title": "IGICE CYA 3",
             "description": "Ibikorwa bya buri munsi",
-            "imageUrl": "unit-image.png",
+            "imageUrl": "https://res.cloudinary.com/dpfonnjv3/image/upload/v1750024523/illustration_of_food_plate_vpnv9q.png",
             "progress": 0,
             "lessons": [
                 {
@@ -178,64 +178,11 @@
                     "type": "sign",
                     "status": "pending",
                     "isLiked": false
-                }
-            ]
-        },
-        {
-            "id": "4",
-            "title": "IGICE CYA 4",
-            "description": "Indamukanyo",
-            "imageUrl": "unit-image.png",
-            "progress": 0,
-            "lessons": [
+                },
                 {
                     "id": "15",
-                    "title": "Mwaramutse",
-                    "description": "Indamukanyo yo mu gitondo.",
-                    "video": "https://res.cloudinary.com/dpfonnjv3/video/upload/v1749988489/Mwaramutse_rdlzqx.mp4",
-                    "image": "https://example.com/images/mwaramutse.jpg",
-                    "icon": "🌅",
-                    "type": "sign",
-                    "status": "pending",
-                    "isLiked": false
-                },
-                {
-                    "id": "16",
-                    "title": "Mwiriwe",
-                    "description": "Indamukanyo yo ku gicamunsi na nimugoroba.",
-                    "video": "https://res.cloudinary.com/dpfonnjv3/video/upload/v1749988482/Mwiriwe_-_Saa_Sita_pfktm9.mp4",
-                    "image": "https://example.com/images/mwiriwe.jpg",
-                    "icon": "🌇",
-                    "type": "sign",
-                    "status": "pending",
-                    "isLiked": false
-                },
-                {
-                    "id": "17",
-                    "title": "Amakuru",
-                    "description": "Ikimenyetso cyo kubaza amakuru y'umuntu.",
-                    "video": "https://res.cloudinary.com/dpfonnjv3/video/upload/v1749988487/Mwiriwe_-_Nimugoroba_veiyqh.mp4",
-                    "image": "https://example.com/images/amakuru.jpg",
-                    "icon": "🤝",
-                    "type": "sign",
-                    "status": "pending",
-                    "isLiked": false
-                },
-                {
-                    "id": "18",
-                    "title": "Ijoro ryiza",
-                    "description": "Ikimenyetso cyo kwifuriza umuntu ijoro ryiza.",
-                    "video": "https://res.cloudinary.com/dpfonnjv3/video/upload/v1749988479/Mwiriwe_-_Nijoro_qgcvlq.mp4",
-                    "image": "https://example.com/images/ijoro-ryiza.jpg",
-                    "icon": "🌃",
-                    "type": "sign",
-                    "status": "pending",
-                    "isLiked": false
-                },
-                {
-                    "id": "19",
-                    "title": "Inkuru: Gusuhuza",
-                    "description": "Inkuru ya Pawulo arimo gusuhuza.",
+                    "title": "Inkuru: Umunsi wa Pawulo",
+                    "description": "Pawulo ararya, akanywa yarangiza akaryama.",
                     "video": "https://res.cloudinary.com/dpfonnjv3/video/upload/v1749988486/Pawulo_Ararya_imedwd.mp4",
                     "image": "https://example.com/images/story-pawulo.jpg",
                     "icon": "📖",
@@ -246,10 +193,63 @@
             ]
         },
         {
+            "id": "4",
+            "title": "IGICE CYA 4",
+            "description": "Indamukanyo",
+            "imageUrl": "https://res.cloudinary.com/dpfonnjv3/image/upload/v1750024527/Illustration_of_hands_shaking_each_other_xa9d51.png",
+            "progress": 0,
+            "lessons": [
+                {
+                    "id": "16",
+                    "title": "Mwaramutse",
+                    "description": "Indamukanyo yo mu gitondo.",
+                    "video": "https://res.cloudinary.com/dpfonnjv3/video/upload/v1749988489/Mwaramutse_rdlzqx.mp4",
+                    "image": "https://example.com/images/mwaramutse.jpg",
+                    "icon": "🌅",
+                    "type": "sign",
+                    "status": "pending",
+                    "isLiked": false
+                },
+                {
+                    "id": "17",
+                    "title": "Mwiriwe",
+                    "description": "Indamukanyo yo ku gicamunsi na nimugoroba.",
+                    "video": "https://res.cloudinary.com/dpfonnjv3/video/upload/v1749988482/Mwiriwe_-_Saa_Sita_pfktm9.mp4",
+                    "image": "https://example.com/images/mwiriwe.jpg",
+                    "icon": "🌇",
+                    "type": "sign",
+                    "status": "pending",
+                    "isLiked": false
+                },
+                {
+                    "id": "18",
+                    "title": "Amakuru",
+                    "description": "Ikimenyetso cyo kubaza amakuru y'umuntu.",
+                    "video": "https://res.cloudinary.com/dpfonnjv3/video/upload/v1749988487/Mwiriwe_-_Nimugoroba_veiyqh.mp4",
+                    "image": "https://example.com/images/amakuru.jpg",
+                    "icon": "🤝",
+                    "type": "sign",
+                    "status": "pending",
+                    "isLiked": false
+                },
+                {
+                    "id": "19",
+                    "title": "Ijoro ryiza",
+                    "description": "Ikimenyetso cyo kwifuriza umuntu ijoro ryiza.",
+                    "video": "https://res.cloudinary.com/dpfonnjv3/video/upload/v1749988479/Mwiriwe_-_Nijoro_qgcvlq.mp4",
+                    "image": "https://example.com/images/ijoro-ryiza.jpg",
+                    "icon": "🌃",
+                    "type": "sign",
+                    "status": "pending",
+                    "isLiked": false
+                }
+            ]
+        },
+        {
             "id": "5",
             "title": "IGICE CYA 5",
             "description": "Amarangamutima",
-            "imageUrl": "unit-image.png",
+            "imageUrl": "https://res.cloudinary.com/dpfonnjv3/image/upload/v1750024517/illustration_of_emotions__use_black_people_if_there_is_a_subject__lgtnum.png",
             "progress": 0,
             "lessons": [
                 {

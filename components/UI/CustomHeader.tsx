@@ -110,7 +110,7 @@ export default function CustomHeader({
                         <Feather name="search" size={20} color="muted" className="mr-2" />
                         <TextInput
                             placeholder="Shakisha mu masomo"
-                            placeholderTextColor="muted"
+                            placeholderTextColor="#9CA3AF"
                             className="flex-1 text-base text-dark"
                             onChangeText={(text) => useSearchStore.getState().setValue(text)}
                             value={useSearchStore(state => state.value)}

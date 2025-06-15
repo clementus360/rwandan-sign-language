@@ -20,9 +20,19 @@ export default function PracticePage() {
 
   const currentQuestion = usePracticeStore(state => state.currentQuestion());
 
+  // Initialize player with current question video and set to loop and autoplay
   const player = useVideoPlayer(currentQuestion?.video ?? '', player => {
     player.loop = true;
+    player.play(); // Start playing automatically
   });
+
+  // Clean up player when currentQuestion changes or component unmounts
+  useEffect(() => {
+    return () => {
+      player.pause();
+      player.replace(null); // Reset the player source
+    };
+  }, []);
 
   const { isPlaying } = useEvent(player, 'playingChange', {
     isPlaying: player.playing,
@@ -440,12 +450,12 @@ export default function PracticePage() {
             })}
           </View>
           {/* Temporary Clear Button for Testing */}
-          <CustomButton
+          {/* <CustomButton
             title="Clear AsyncStorage"
             onPress={clearAsyncStorage}
             color="accent"
             icon={<Feather name="trash-2" size={16} color="white" />}
-          />
+          /> */}
         </View>
         <View className="h-40" />
       </ScrollView>
