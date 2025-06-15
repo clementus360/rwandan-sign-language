@@ -22,9 +22,20 @@ export default function LessonDetailPage() {
     const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [isInteractingWithControls, setIsInteractingWithControls] = useState(false);
 
-    const player = useVideoPlayer(lesson?.video ?? '', player => {
+    // Initialize player with lesson video and set to loop
+    const player = useVideoPlayer(lesson?.video ?? '', (player) => {
         player.loop = true;
+        // Start playing automatically
+        player.play();
     });
+
+    // Clean up player when lessonId changes or component unmounts
+    useEffect(() => {
+        return () => {
+            player.pause();
+            player.replace(null); // Reset the player source
+        };
+    }, [lessonId, player]);
 
     const { isPlaying } = useEvent(player, 'playingChange', {
         isPlaying: player.playing,
@@ -40,8 +51,7 @@ export default function LessonDetailPage() {
             toValue: 1,
             duration: 300,
             useNativeDriver: true,
-        }).start(() => {
-        });
+        }).start();
     };
 
     const fadeOut = () => {
