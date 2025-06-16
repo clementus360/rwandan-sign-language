@@ -6,7 +6,7 @@ import { useEvent } from 'expo';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useEffect, useRef, useState } from 'react';
-import { Animated, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, Pressable, ScrollView, Text, View } from 'react-native';
 
 export default function LessonDetailPage() {
     const { lessonId } = useLocalSearchParams<{ lessonId: string }>();
@@ -19,14 +19,19 @@ export default function LessonDetailPage() {
 
     const fadeAnim = useRef(new Animated.Value(1)).current;
     const [controlsVisible, setControlsVisible] = useState(true);
+    const [isVideoLoading, setIsVideoLoading] = useState(true);
     const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [isInteractingWithControls, setIsInteractingWithControls] = useState(false);
 
     // Initialize player with lesson video and set to loop
     const player = useVideoPlayer(lesson?.video ?? '', (player) => {
         player.loop = true;
-        // Start playing automatically
-        player.play();
+        // Don't auto-play until video is loaded
+    });
+
+    // Listen to player status changes
+    const { status } = useEvent(player, 'statusChange', {
+        status: player.status,
     });
 
     // Clean up player when lessonId changes or component unmounts
@@ -40,6 +45,17 @@ export default function LessonDetailPage() {
     const { isPlaying } = useEvent(player, 'playingChange', {
         isPlaying: player.playing,
     });
+
+    // Handle video loading status
+    useEffect(() => {
+        if (status === 'readyToPlay') {
+            setIsVideoLoading(false);
+            // Auto-play once the video is ready
+            player.play();
+        } else if (status === 'loading' || status === 'idle') {
+            setIsVideoLoading(true);
+        }
+    }, [status, player]);
 
     const fadeIn = () => {
         if (hideTimeoutRef.current) {
@@ -109,6 +125,9 @@ export default function LessonDetailPage() {
     }
 
     const handlePlay = () => {
+        // Prevent play/pause when video is still loading
+        if (isVideoLoading) return;
+        
         if (!isPlaying) {
             player.play();
         } else {
@@ -117,6 +136,9 @@ export default function LessonDetailPage() {
     };
 
     const handleVideoTap = () => {
+        // Don't handle video tap when loading
+        if (isVideoLoading) return;
+        
         if (controlsVisible && isPlaying) {
             fadeOut();
         } else if (!controlsVisible) {
@@ -156,6 +178,27 @@ export default function LessonDetailPage() {
                         allowsFullscreen
                         allowsPictureInPicture
                     />
+                    
+                    {/* Loading overlay */}
+                    {isVideoLoading && (
+                        <View
+                            style={{
+                                position: 'absolute',
+                                width: '100%',
+                                height: '100%',
+                                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                zIndex: 20,
+                            }}
+                        >
+                            <ActivityIndicator size="large" color="#F59E0B" />
+                            <Text style={{ color: 'white', marginTop: 16, fontSize: 16 }}>
+                                Gushakisha video...
+                            </Text>
+                        </View>
+                    )}
+
                     <Animated.View
                         style={{
                             position: 'absolute',
@@ -192,7 +235,7 @@ export default function LessonDetailPage() {
                                     { translateX: -0.5 * 150 },
                                     { translateY: -0.5 * 48 }
                                 ],
-                                backgroundColor: '#F59E0B',
+                                backgroundColor: isVideoLoading ? 'rgba(245, 158, 11, 0.5)' : '#F59E0B',
                                 paddingHorizontal: 24,
                                 paddingVertical: 16,
                                 borderRadius: 9999,
@@ -201,10 +244,15 @@ export default function LessonDetailPage() {
                                 justifyContent: 'center',
                                 zIndex: 10,
                             }}
+                            disabled={isVideoLoading}
                         >
-                            <Feather name={isPlaying ? 'pause' : 'play'} size={20} color="#fff" />
+                            {isVideoLoading ? (
+                                <ActivityIndicator size={20} color="#fff" />
+                            ) : (
+                                <Feather name={isPlaying ? 'pause' : 'play'} size={20} color="#fff" />
+                            )}
                             <Text style={{ color: 'white', fontWeight: 'bold', marginLeft: 8 }}>
-                                {isPlaying ? 'Hagarara' : 'Tangira'}
+                                {isVideoLoading ? 'Gutegura...' : (isPlaying ? 'Hagarara' : 'Tangira')}
                             </Text>
                         </Pressable>
                         <Pressable

@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEvent } from 'expo';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, Modal, Pressable, ScrollView, StatusBar, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, Dimensions, Modal, Pressable, ScrollView, StatusBar, Text, View } from 'react-native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -20,10 +20,15 @@ export default function PracticePage() {
 
   const currentQuestion = usePracticeStore(state => state.currentQuestion());
 
-  // Initialize player with current question video and set to loop and autoplay
+  // Initialize player with current question video and set to loop
   const player = useVideoPlayer(currentQuestion?.video ?? '', player => {
     player.loop = true;
-    player.play(); // Start playing automatically
+    // Don't auto-play until video is loaded
+  });
+
+  // Listen to player status changes
+  const { status } = useEvent(player, 'statusChange', {
+    status: player.status,
   });
 
   // Clean up player when currentQuestion changes or component unmounts
@@ -41,6 +46,7 @@ export default function PracticePage() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const controlsFadeAnim = useRef(new Animated.Value(1)).current;
   const [controlsVisible, setControlsVisible] = useState(true);
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
   const hideTimeoutRef = useRef<number | null>(null);
   const [isInteractingWithControls, setIsInteractingWithControls] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -64,6 +70,22 @@ export default function PracticePage() {
     usePracticeStore.getState().init(); // fetch JSON once
     checkOnboarding();
   }, []);
+
+  // Handle video loading status
+  useEffect(() => {
+    if (status === 'readyToPlay') {
+      setIsVideoLoading(false);
+      // Auto-play once the video is ready
+      player.play();
+    } else if (status === 'loading' || status === 'idle') {
+      setIsVideoLoading(true);
+    }
+  }, [status, player]);
+
+  // Reset loading state when question changes
+  useEffect(() => {
+    setIsVideoLoading(true);
+  }, [currentQuestion?.video]);
 
   // Feedback animation for wrong answers
   useEffect(() => {
@@ -212,6 +234,9 @@ export default function PracticePage() {
   }, [isInteractingWithControls]);
 
   const handlePlay = () => {
+    // Prevent play/pause when video is still loading
+    if (isVideoLoading) return;
+    
     if (!isPlaying) {
       player.play();
     } else {
@@ -220,6 +245,9 @@ export default function PracticePage() {
   };
 
   const handleVideoTap = () => {
+    // Don't handle video tap when loading
+    if (isVideoLoading) return;
+    
     if (controlsVisible && isPlaying) {
       fadeOutControls();
     } else if (!controlsVisible) {
@@ -332,6 +360,27 @@ export default function PracticePage() {
             allowsFullscreen
             allowsPictureInPicture
           />
+          
+          {/* Loading overlay */}
+          {isVideoLoading && (
+            <View
+              style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 20,
+              }}
+            >
+              <ActivityIndicator size="large" color="#F59E0B" />
+              <Text style={{ color: 'white', marginTop: 16, fontSize: 16 }}>
+                Gushakisha video...
+              </Text>
+            </View>
+          )}
+
           <Animated.View
             style={{
               position: 'absolute',
@@ -354,11 +403,31 @@ export default function PracticePage() {
               onPress={handlePlay}
               onPressIn={() => setIsInteractingWithControls(true)}
               onPressOut={() => setIsInteractingWithControls(false)}
-              className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary px-6 py-3 rounded-full flex-row items-center justify-center"
+              style={{
+                position: 'absolute',
+                top: '40%',
+                left: '50%',
+                transform: [
+                  { translateX: -75 }, // Half of approximate button width
+                  { translateY: -24 }  // Half of approximate button height
+                ],
+                backgroundColor: isVideoLoading ? 'rgba(245, 158, 11, 0.5)' : '#F59E0B',
+                paddingHorizontal: 24,
+                paddingVertical: 12,
+                borderRadius: 9999,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              disabled={isVideoLoading}
             >
-              <Feather name={isPlaying ? 'pause' : 'play'} size={20} color="#fff" />
-              <Text className="text-white font-bold ml-2">
-                {isPlaying ? 'Hagarara' : 'Tangira'}
+              {isVideoLoading ? (
+                <ActivityIndicator size={20} color="#fff" />
+              ) : (
+                <Feather name={isPlaying ? 'pause' : 'play'} size={20} color="#fff" />
+              )}
+              <Text style={{ color: 'white', fontWeight: 'bold', marginLeft: 8 }}>
+                {isVideoLoading ? 'Biri  kuza...' : (isPlaying ? 'Hagarara' : 'Tangira')}
               </Text>
             </Pressable>
             <Pressable

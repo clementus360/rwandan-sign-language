@@ -18,7 +18,7 @@ export default function UnitHeader({
     return (
         <View className="relative w-full flex flex-row items-center justify-start gap-4 py-4">
             <Image
-                source={imageUrl? imageUrl:require("@/assets/images/unit-image.png")}
+                src={imageUrl}
                 className='rounded-full'
                 style={{ width: 64, height: 64, borderRadius: 20 }}
                 resizeMode="cover"
