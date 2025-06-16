@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
         elevation: 8,
         borderWidth: 1,
         borderColor: '#E5E7EB',
+        zIndex: 1000, // Ensure the menu is above other elements
     },
     menuItem: {
         flexDirection: 'row',

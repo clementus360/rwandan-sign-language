@@ -97,7 +97,7 @@ export default function ContinueCard() {
                         onPress={() => setShowLikedOnly(false)}
                     >
                         <Text className={`text-sm font-nunito ${!showLikedOnly ? 'text-white' : 'text-gray-400'}`}>
-                            All
+                            Byose
                         </Text>
                     </Pressable>
                     <Pressable
@@ -105,7 +105,7 @@ export default function ContinueCard() {
                         onPress={() => setShowLikedOnly(true)}
                     >
                         <Text className={`text-sm font-nunito ${showLikedOnly ? 'text-white' : 'text-gray-400'}`}>
-                            Liked
+                            Ibikunzwe
                         </Text>
                     </Pressable>
                 </View>

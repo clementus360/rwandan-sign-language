@@ -24,17 +24,17 @@ interface OnboardingStep {
 const onboardingSteps: OnboardingStep[] = [
     {
         title: "Vugana n'umutima we",
-        description: "Amarenga si amagambo gusa, ni inzira yo kumva no gusobanukirwa isi y'umwana wawe. Reka tugufashe gutangira uru rugendo rwuje urukundo no kwiyunga.",
+        description: "Amarenga si amagambo gusa, ni inzira yo kumva no gusobanukirwa umwana wawe. Uko wiga amarenga, niko urushaho kumva amarangamutima ye no kumufasha mu rugendo rwe.",
         image: 'https://res.cloudinary.com/dpfonnjv3/image/upload/v1749546987/bg2_anndpr.png',
     },
     {
         title: "Intambwe imwe ku yindi",
-        description: "Twaguteguriye amasomo magufi kandi yoroshye kugira ngo wige utababaye. Buri munsi, wiga ikimenyetso gishya mu buryo bushimishije kandi butakuremereye.",
+        description: "Twaguteguriye amasomo magufi kandi yoroshye kugira ngo wige bitakugoye. Buri munsi, wiga ikimenyetso gishya mu buryo bushimishije kandi butakuremereye.",
         image: 'https://res.cloudinary.com/dpfonnjv3/image/upload/v1749546986/bg_i6j86a.png',
     },
     {
         title: "Buri kimenyetso n' ingenzi",
-        description: "Buri kimenyetso wiga cyubaka ikiraro kiguhuza n'umwana wawe. Komeza kandi wizere ko intambwe ntoya ariyo itanga impinduka nini.",
+        description: "Buri kimenyetso wiga cyubaka ikiraro kiguhuza n'umwana wawe. Komeza kandi wizere ko n' intambwe ntoya yatanga impinduka nini.",
         image: 'https://res.cloudinary.com/dpfonnjv3/image/upload/v1749546987/bg3_brefk2.png',
     },
 ];
@@ -139,7 +139,7 @@ export default function Onboarding() {
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 24, backgroundColor: '#FFFFFF' }}>
                                         <View style={{ width: '100%', maxWidth: 400 }}>
                                             <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#1F2A44', marginBottom: 16, textAlign: 'center' }}>
-                                                Andika izina ryawe
+                                                Izina Ryawe
                                             </Text>
                                             <TextInput
                                                 style={{
