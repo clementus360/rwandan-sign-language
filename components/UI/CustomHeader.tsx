@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/useUserStore';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type CustomHeaderProps = {
@@ -87,18 +87,6 @@ export default function CustomHeader({
                 {showNotification && (
                     <Pressable className="p-1 relative" onPress={toggleMenu}>
                         <Feather name="menu" size={22} color="black" />
-                        {menuVisible && (
-                            <View style={styles.menu}>
-                                <Pressable onPress={handleSettingsPress} style={styles.menuItem}>
-                                    <Feather name="settings" size={20} color="#000000" style={styles.menuIcon} />
-                                    <Text style={styles.menuText}>Hindura</Text>
-                                </Pressable>
-                                <Pressable onPress={handleProgressPress} style={styles.menuItem}>
-                                    <Feather name="trending-up" size={20} color="#000000" style={styles.menuIcon} />
-                                    <Text style={styles.menuText}>Ibyagezweho</Text>
-                                </Pressable>
-                            </View>
-                        )}
                     </Pressable>
                 )}
             </View>
@@ -118,15 +106,75 @@ export default function CustomHeader({
                     </View>
                 </View>
             )}
+
+            {/* Menu (with backdrop) */}
+            {menuVisible && (
+                <View style={styles.menuContainer}>
+                    {/* Backdrop */}
+                    <TouchableWithoutFeedback onPress={toggleMenu}>
+                        <View />
+                    </TouchableWithoutFeedback>
+                    {/* Menu */}
+                    <View style={[styles.menu, { top: 60 + insets.top }]}>
+                        <Pressable
+                            onPress={handleSettingsPress}
+                            style={styles.menuItem}
+                            accessibilityLabel="Settings"
+                            accessibilityRole="button"
+                        >
+                            <Feather name="settings" size={20} color="#000000" style={styles.menuIcon} />
+                            <Text style={styles.menuText}>Hindura</Text>
+                        </Pressable>
+                        <Pressable
+                            onPress={handleProgressPress}
+                            style={styles.menuItem}
+                            accessibilityLabel="Progress"
+                            accessibilityRole="button"
+                        >
+                            <Feather name="trending-up" size={20} color="#000000" style={styles.menuIcon} />
+                            <Text style={styles.menuText}>Ibyagezweho</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            )}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    headerContainer: {
+        zIndex: 1000, // Base zIndex for header
+        position: 'relative',
+    },
+    headerRow: {
+        zIndex: 1001, // Ensure header row is above other content
+    },
+    searchContainer: {
+        zIndex: 500, // Lower zIndex for search bar
+    },
+    searchInput: {
+        zIndex: 500, // Explicitly set for TextInput
+    },
+    menuContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 10000, // High zIndex for menu container
+    },
+    backdrop: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Semi-transparent backdrop
+        zIndex: 9999, // Just below menu
+    },
     menu: {
         position: 'absolute',
-        top: 40,
-        right: 0,
+        right: 16,
         width: 200,
         backgroundColor: '#FFFFFF',
         borderRadius: 12,
@@ -138,7 +186,7 @@ const styles = StyleSheet.create({
         elevation: 8,
         borderWidth: 1,
         borderColor: '#E5E7EB',
-        zIndex: 1000, // Ensure the menu is above other elements
+        zIndex: 10000, // Ensure menu is on top
     },
     menuItem: {
         flexDirection: 'row',

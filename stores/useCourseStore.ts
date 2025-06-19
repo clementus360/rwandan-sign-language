@@ -3,6 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+
 type CourseStore = {
     showLikedOnly: boolean;
     units: Unit[];
@@ -22,6 +25,8 @@ type CourseStore = {
     updateUnit: (id: string, updates: Partial<Omit<Unit, 'id' | 'lessons'>>) => void;
     deleteUnit: (id: string) => void;
     setShowLikedOnly: (value: boolean) => void;
+    downloadLesson: (lessonId: string) => Promise<void>;
+    removeDownloadedLesson: (lessonId: string) => Promise<void>;
 };
 
 export const useCourseStore = create<CourseStore>()(
@@ -174,6 +179,54 @@ export const useCourseStore = create<CourseStore>()(
             },
 
             setShowLikedOnly: (value) => set({ showLikedOnly: value }),
+
+            downloadLesson: async (lessonId: string) => {
+                const lesson = get().getLessonById(lessonId);
+                if (!lesson || lesson.downloaded) return;
+
+                try {
+                    // Request media library permissions
+                    const { status } = await MediaLibrary.requestPermissionsAsync();
+                    if (status !== 'granted') {
+                        throw new Error('Media library permission denied');
+                    }
+
+                    const fileUri = `${FileSystem.documentDirectory}${lessonId}.mp4`;
+                    const { uri } = await FileSystem.downloadAsync(lesson.video, fileUri);
+
+                    set((state) => ({
+                        units: state.units.map((unit) => ({
+                            ...unit,
+                            lessons: unit.lessons.map((l) =>
+                                l.id === lessonId ? { ...l, downloaded: true, localUri: uri } : l
+                            ),
+                        })),
+                    }));
+                } catch (error) {
+                    console.error('Download failed:', error);
+                    throw error; // Re-throw to handle in UI
+                }
+            },
+
+            removeDownloadedLesson: async (lessonId: string) => {
+                const lesson = get().getLessonById(lessonId);
+                if (!lesson || !lesson.downloaded || !lesson.localUri) return;
+
+                try {
+                    await FileSystem.deleteAsync(lesson.localUri);
+                    set((state) => ({
+                        units: state.units.map((unit) => ({
+                            ...unit,
+                            lessons: unit.lessons.map((l) =>
+                                l.id === lessonId ? { ...l, downloaded: false, localUri: undefined } : l
+                            ),
+                        })),
+                    }));
+                } catch (error) {
+                    console.error('Failed to remove downloaded file:', error);
+                    throw error; // Re-throw to handle in UI
+                }
+            },
         }),
         {
             name: 'course-storage',

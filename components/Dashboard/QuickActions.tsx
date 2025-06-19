@@ -105,7 +105,7 @@ export default function QuickActions() {
                         ]}
                     >
                         {action.icon}
-                        <Text className="text-center text-sm font-inter-medium text-nowrap">{action.title}</Text>
+                        <Text className="text-center text-xs font-inter-medium text-nowrap">{action.title}</Text>
                     </Pressable>
                 ))}
             </View>

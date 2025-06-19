@@ -10,14 +10,14 @@ export default function Suggested() {
             title: "Amarangamutima",
             description: "Menya uko wavugana n'abagize umuryango wawe — mama, papa, murumuna...",
             iconSource: '@/assets/icons/user-love', // Replace with your icon path
-            onCTAPress: () => router.push('/learn/9'), // Navigate to the specific lesson
+            onCTAPress: () => router.push('/learn/20'), // Navigate to the specific lesson
         },
         {
             imageSource: require('@/assets/images/greetings-image.png'), // Replace with another image path
             title: "Indamukanyo",
             description: "Uko wasuhuza, uvuga ‘bite’, ‘murakoze’, ‘naramutse’...",
             iconSource: '@/assets/icons/peace-hand.png', // Replace with your icon path
-            onCTAPress: () => router.push('/learn/5'), // Navigate to the specific lesson
+            onCTAPress: () => router.push('/learn/16'), // Navigate to the specific lesson
         },
         // Add more suggestions as needed
     ]

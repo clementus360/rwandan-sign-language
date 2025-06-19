@@ -6,7 +6,7 @@ import { useEvent } from 'expo';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Animated, Pressable, ScrollView, Text, View } from 'react-native';
 
 export default function LessonDetailPage() {
     const { lessonId } = useLocalSearchParams<{ lessonId: string }>();
@@ -16,17 +16,21 @@ export default function LessonDetailPage() {
     const toggleLessonStatus = useCourseStore((state) => state.toggleLessonStatus);
     const toggleLessonLike = useCourseStore((state) => state.toggleLessonLike);
     const getNextLessonId = useCourseStore((state) => state.getNextLessonId);
+    const downloadLesson = useCourseStore((state) => state.downloadLesson);
+    const removeDownloadedLesson = useCourseStore((state) => state.removeDownloadedLesson);
 
     const fadeAnim = useRef(new Animated.Value(1)).current;
     const [controlsVisible, setControlsVisible] = useState(true);
     const [isVideoLoading, setIsVideoLoading] = useState(true);
+    const [isDownloading, setIsDownloading] = useState(false);
+
+
     const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [isInteractingWithControls, setIsInteractingWithControls] = useState(false);
 
-    // Initialize player with lesson video and set to loop
-    const player = useVideoPlayer(lesson?.video ?? '', (player) => {
+    // Initialize player with lesson video (use localUri if downloaded)
+    const player = useVideoPlayer(lesson?.downloaded && lesson?.localUri ? lesson.localUri : lesson?.video ?? '', (player) => {
         player.loop = true;
-        // Don't auto-play until video is loaded
     });
 
     // Listen to player status changes
@@ -127,7 +131,7 @@ export default function LessonDetailPage() {
     const handlePlay = () => {
         // Prevent play/pause when video is still loading
         if (isVideoLoading) return;
-        
+
         if (!isPlaying) {
             player.play();
         } else {
@@ -138,7 +142,7 @@ export default function LessonDetailPage() {
     const handleVideoTap = () => {
         // Don't handle video tap when loading
         if (isVideoLoading) return;
-        
+
         if (controlsVisible && isPlaying) {
             fadeOut();
         } else if (!controlsVisible) {
@@ -161,6 +165,27 @@ export default function LessonDetailPage() {
         }
     };
 
+    const handleDownload = async () => {
+        if (!lesson) return;
+        setIsDownloading(true);
+        try {
+            if (lesson.downloaded) {
+                await removeDownloadedLesson(lesson.id);
+            } else {
+                await downloadLesson(lesson.id);
+            }
+        } catch (error: any) {
+            Alert.alert(
+                'Error',
+                error.message === 'Media library permission denied'
+                    ? 'Please grant storage permissions to download videos.'
+                    : 'Failed to download video. Please try again.'
+            );
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
     return (
         <>
             <CustomHeader
@@ -178,7 +203,7 @@ export default function LessonDetailPage() {
                         allowsFullscreen
                         allowsPictureInPicture
                     />
-                    
+
                     {/* Loading overlay */}
                     {isVideoLoading && (
                         <View
@@ -218,23 +243,14 @@ export default function LessonDetailPage() {
                             pointerEvents="auto"
                         />
                         <Pressable
-                            onPress={() => {
-                                handlePlay();
-                            }}
-                            onPressIn={() => {
-                                setIsInteractingWithControls(true);
-                            }}
-                            onPressOut={() => {
-                                setIsInteractingWithControls(false);
-                            }}
+                            onPress={handlePlay}
+                            onPressIn={() => setIsInteractingWithControls(true)}
+                            onPressOut={() => setIsInteractingWithControls(false)}
                             style={{
                                 position: 'absolute',
                                 top: '40%',
                                 left: '50%',
-                                transform: [
-                                    { translateX: -0.5 * 150 },
-                                    { translateY: -0.5 * 48 }
-                                ],
+                                transform: [{ translateX: -0.5 * 150 }, { translateY: -0.5 * 48 }],
                                 backgroundColor: isVideoLoading ? 'rgba(245, 158, 11, 0.5)' : '#F59E0B',
                                 paddingHorizontal: 24,
                                 paddingVertical: 16,
@@ -255,16 +271,33 @@ export default function LessonDetailPage() {
                                 {isVideoLoading ? 'Gutegura...' : (isPlaying ? 'Hagarara' : 'Tangira')}
                             </Text>
                         </Pressable>
-                        <Pressable
+                        {/* <Pressable
                             className="absolute bottom-3 right-4 bg-neutral px-3 py-1 rounded-full"
-                            onPressIn={() => {
-                                setIsInteractingWithControls(true);
-                            }}
-                            onPressOut={() => {
-                                setIsInteractingWithControls(false);
-                            }}
+                            onPressIn={() => setIsInteractingWithControls(true)}
+                            onPressOut={() => setIsInteractingWithControls(false)}
                         >
                             <Text className="text-muted text-sm">Gahoro</Text>
+                        </Pressable> */}
+                        {/* Download Button */}
+                        <Pressable
+                            className="absolute flex flex-row bottom-3 left-4 bg-neutral px-3 py-1 rounded-full"
+                            onPress={handleDownload}
+                            onPressIn={() => setIsInteractingWithControls(true)}
+                            onPressOut={() => setIsInteractingWithControls(false)}
+                            disabled={isDownloading}
+                        >
+                            {isDownloading ? (
+                                <ActivityIndicator size="small" color="#F59E0B" />
+                            ) : (
+                                <Feather
+                                    name={lesson.downloaded ? 'check-circle' : 'download'}
+                                    size={16}
+                                    color={lesson.downloaded ? '#22C55E' : '#F59E0B'}
+                                />
+                            )}
+                            <Text className="text-muted text-sm ml-1">
+                                {isDownloading ? 'Tegereza...' : lesson.downloaded ? 'Irabitse' : 'Bika iyi videwo'}
+                            </Text>
                         </Pressable>
                     </Animated.View>
                 </View>

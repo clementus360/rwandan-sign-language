@@ -12,6 +12,8 @@ export interface Lesson {
     icon: string;
     status: 'completed' | 'pending';
     isLiked: boolean;
+    downloaded?: boolean; // New field
+    localUri?: string;
 }
 
 export interface Unit {
